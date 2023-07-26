@@ -1,0 +1,46 @@
+resource "aws_route_table" "publicrt" {
+  vpc_id = aws_vpc.myvpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.gw.id
+  }
+    tags = {
+       Name = "Public_route" 
+      
+    }
+}
+resource "aws_route_table_association" "public_subnet_association" {
+  subnet_id      = aws_subnet.Pubsub1.id
+  route_table_id = aws_route_table.publicrt.id
+}
+
+resource "aws_route_table" "Privatert" {
+  vpc_id = aws_vpc.myvpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_nat_gateway.natgtw.id
+  }
+
+  tags = {
+    Name = "Privateroute"
+  }
+}
+resource "aws_route_table_association" "private_subnet_association" {
+  subnet_id      = aws_subnet.prisub1.id
+  route_table_id = aws_route_table.Privatert.id
+}
+resource "aws_route_table" "Privatert2" {
+  vpc_id = aws_vpc.myvpc.id
+  
+  tags = {
+    Name = "Private2"
+  }
+
+  }
+
+resource "aws_route_table_association" "private_subnet_association2" {
+  subnet_id      = aws_subnet.prisub2.id
+  route_table_id = aws_route_table.Privatert2.id
+}
