@@ -1,0 +1,34 @@
+resource "aws_instance" "nginx" {
+  ami                         = "ami-00c6c849418b7612c"
+  instance_type               = "t2.micro"
+  key_name                    = "App"
+  monitoring                  = true
+  vpc_security_group_ids      = ["${aws_security_group.sg.id}"]
+  subnet_id                   = aws_subnet.Pubsub1.id
+  associate_public_ip_address = true
+}
+
+resource "aws_instance" "web" {
+  ami                         = "ami-00c6c849418b7612c"
+  instance_type               = "t2.micro"
+  key_name                    = "App"
+  monitoring                  = true
+  vpc_security_group_ids      = ["${aws_security_group.sg.id}"]
+  subnet_id                   = aws_subnet.prisub1.id
+}
+  resource "aws_db_instance" "db_instance" {
+  engine               = "mysql"
+  identifier           = "myrdsinstance"
+  allocated_storage    =  20
+  engine_version       = "8.0.33"
+  instance_class       = "db.t2.micro"
+  multi_az             =  false
+  username             = "infra"
+  password             = "Thanks2023"
+  port                 =  3306 
+  db_name              = "applicationdb"
+  vpc_security_group_ids = ["${aws_security_group.db.id}"]
+  skip_final_snapshot  = true
+  db_subnet_group_name   = aws_db_subnet_group.dbsubnet.name
+  }
+  
